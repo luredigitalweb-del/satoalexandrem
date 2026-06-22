@@ -1704,6 +1704,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   // WhatsApp popup + store picker (universal) — Instagram variant
   const IG_PREFIX = 'Olá! Vim pelo Instagram.';
+  const buildIgMessage = (txt) => {
+    const clean = (txt || '').replace(/^\s*Olá[!.,]?\s*/i, '').trim();
+    return clean ? `${IG_PREFIX} ${clean}` : IG_PREFIX;
+  };
   (function(){
     const btn = document.getElementById('waToggle');
     const popup = document.getElementById('waPopup');
@@ -1713,7 +1717,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     let currentText = '';
 
     const setMessage = (txt) => {
-      const finalText = txt ? `${IG_PREFIX} ${txt}` : IG_PREFIX;
+      const finalText = buildIgMessage(txt);
       currentText = finalText;
       items.forEach((a,i) => {
         const base = baseHrefs[i];
