@@ -1702,7 +1702,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     nav.classList.toggle('scrolled', window.scrollY > 30);
   });
 
-  // WhatsApp popup + store picker (universal)
+  // WhatsApp popup + store picker (universal) — Site variant
+  const SITE_PREFIX = 'Olá! Vim pelo site.';
+  const buildSiteMessage = (txt) => {
+    const clean = (txt || '').replace(/^\s*Olá[!.,]?\s*/i, '').trim();
+    return clean ? `${SITE_PREFIX} ${clean}` : SITE_PREFIX;
+  };
   (function(){
     const btn = document.getElementById('waToggle');
     const popup = document.getElementById('waPopup');
@@ -1712,12 +1717,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     let currentText = '';
 
     const setMessage = (txt) => {
-      currentText = txt || '';
+      const finalText = buildSiteMessage(txt);
+      currentText = finalText;
       items.forEach((a,i) => {
         const base = baseHrefs[i];
-        a.setAttribute('href', currentText ? `${base}?text=${encodeURIComponent(currentText)}` : base);
+        a.setAttribute('href', `${base}?text=${encodeURIComponent(finalText)}`);
       });
     };
+
+    setMessage('');
+
+    document.querySelectorAll('a.loc-btn.wa').forEach(a => {
+      const base = a.getAttribute('href').split('?')[0];
+      a.setAttribute('href', `${base}?text=${encodeURIComponent(SITE_PREFIX)}`);
+    });
 
     const open = () => {
       popup.classList.add('open');
